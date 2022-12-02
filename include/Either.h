@@ -30,6 +30,9 @@ public:
 	Either(L&& l) : m_left(l) {}
 	Either(R&& r) : m_right(r) {}
 
+	using RighType = R;
+	using LeftType = L;
+
 	// warning: definition of implicit copy constructor for ... is deprecated because it has a user-provided destructor [-Wdeprecated-copy-with-user-provided-dtor]
 	// ~Either() { if ( isLeft() ) { (*m_left).~L(); } else { (*m_right).~R(); } }
 

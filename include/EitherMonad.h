@@ -22,6 +22,23 @@ Stream& operator<<(Stream& ss, const Either<TLeft, TRight>& x)
 template <typename T>
 auto Do(T x) { return mreturn<Either, Error, T>(x); }
 
+// FIXME
+#include <functional>
+#define WATCH_TYPE(x) std::cout << (#x) << ": " << typeid(x).name() << '\n'
+
+template <typename T, typename T_T>
+auto DoubleDo(const T& x, const T_T& fn)
+{
+	using ReturnType = typename decltype(std::function{fn})::result_type::RighType;
+
+	auto ei = (Do(x) >>= fn);
+
+	if (ei.isLeft()) { return mreturn<Either, Error, ReturnType>(*fromLeft(ei)); }
+
+	return mreturn<Either, Error, ReturnType>(*fromRight(ei));
+}
+
+// FIXME
 template <typename T, typename... Args>
 auto _Do(const T& x, const Args&... args)
 {

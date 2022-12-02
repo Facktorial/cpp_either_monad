@@ -1,7 +1,7 @@
 #include <iostream>
 #include <typeinfo>
 
-#include "Either.h"
+#include "include/Either.h"
 
 
 int main()

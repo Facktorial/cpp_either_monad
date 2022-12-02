@@ -1,6 +1,7 @@
 #include <functional>
 #include <iostream>
 #include <optional>
+#include <typeinfo>
 
 #include "include/EitherMonad.h"
 
@@ -17,6 +18,9 @@ struct Scenario
 	std::string txt;
 	std::string toStr() { return txt; }
 };
+
+template<typename Stream>
+Stream& operator<<(Stream& ss, Scenario obj) { return ss << obj.toStr(); }
 
 Either<Error, Scenario> get_scenario(int sc) { 
 	std::vector<Scenario> x {
@@ -37,6 +41,7 @@ Either<Error, Scenario> get_scenario(int sc) {
 
 Either<Error, std::string> fn(Scenario s)
 {
+	std::cout << "FN\n";
 	return "!!!" + s.toStr() + '\n';
 }
 
@@ -50,6 +55,11 @@ int main(int argc, char** argv)
 	std::cout << ((Do ( 0 ) >>= get_scenario ) >>= fn );
 	std::cout << ((Do ( 1 ) >>= get_scenario ) >>= fn );
 	std::cout << ((Do ( 4 ) >>= get_scenario ) >>= fn );
+	
+	//auto x = DoubleDo(2, get_scenario);
+	//std::cout << '\n' << typeid(x).name() << '\n';
+	std::cout << ( DoubleDo( 2, get_scenario ) ) << "\n\n";
+	std::cout << DoubleDo( 5, get_scenario ) << "\n\n";
 
 	//std::cout << _Do(5, get_scenario) << '\n';
 	//std::cout << _Do(5, get_scenario, fn) << '\n';
