@@ -1,4 +1,4 @@
-# NEW_C++
+# My either monad
 
 Simply include library of EitherMonad. Needs more work get done.
 
