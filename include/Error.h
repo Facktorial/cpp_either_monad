@@ -11,7 +11,7 @@ class Error
 	GET_EXIT get_exit;
 
 public:
-	Error (std::string_view msg, int c, GET_EXIT ex)
+	Error (std::string_view msg, size_t c, GET_EXIT ex)
 		: m_msg(msg), m_error_code(c), get_exit(ex) {}
 
 	Error& updateDDate(std::string sv)
@@ -36,7 +36,7 @@ template <typename Stream>
 Stream& error_handle(Stream& ss, Error err)
 {
 	ss << err.toStr();
-	if (err.isExit()) { exit(err.exitCode()); }
+	if (err.isExit()) { exit(static_cast<int>(err.exitCode())); }
 	return ss;
 }
 

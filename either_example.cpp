@@ -1,7 +1,6 @@
 #include <functional>
 #include <iostream>
 #include <optional>
-#include <typeinfo>
 
 #include "include/EitherMonad.h"
 
@@ -19,17 +18,17 @@ struct Scenario
 	std::string toStr() { return txt; }
 };
 
-template<typename Stream>
+template <typename Stream>
 Stream& operator<<(Stream& ss, Scenario obj) { return ss << obj.toStr(); }
 
-Either<Error, Scenario> get_scenario(int sc) { 
+static Either<Error, Scenario> get_scenario(size_t sc) {
 	std::vector<Scenario> x {
 		{ "jedna" },
 		{ "dva" },
 		{ "tri" }
 	};
 	
-	if (sc >= 0 && sc < x.size()) { return x[sc]; }
+	if (sc < x.size()) { return x[sc]; }
 
 	return BadIndexScenario()
 		.updateDDate(
@@ -39,29 +38,25 @@ Either<Error, Scenario> get_scenario(int sc) {
 		);
 }
 
-Either<Error, std::string> fn(Scenario s)
+static Either<Error, std::string> fn(Scenario s)
 {
-	std::cout << "FN\n";
 	return "!!!" + s.toStr() + '\n';
 }
 
-Either<Error, int> get_test_error()
+static Either<Error, int> get_test_error()
 {
 	return TestError();
 }
 
-int main(int argc, char** argv)
+int main(void)
 {
 	std::cout << ((Do ( 0 ) >>= get_scenario ) >>= fn );
 	std::cout << ((Do ( 1 ) >>= get_scenario ) >>= fn );
 	std::cout << ((Do ( 4 ) >>= get_scenario ) >>= fn );
-	
-	//auto x = DoubleDo(2, get_scenario);
-	//std::cout << '\n' << typeid(x).name() << '\n';
+
 	std::cout << ( DoubleDo( 2, get_scenario ) ) << "\n\n";
 	std::cout << DoubleDo( 5, get_scenario ) << "\n\n";
 
-	//std::cout << _Do(5, get_scenario) << '\n';
 	//std::cout << _Do(5, get_scenario, fn) << '\n';
 
 	error_handle(std::cout, *fromLeft(get_test_error()));
