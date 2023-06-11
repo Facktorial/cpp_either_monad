@@ -2,6 +2,7 @@
 
 - Get _Do working.
 - Decouple Error from EitherMonad.h
+- Results (for lefts do this, for rights this)
 
 ## Done
 
